@@ -1,0 +1,406 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "An e-commerce item available for purchase in Zayn.Fashion",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique product identifier",
+          "maxLength": 128
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name of the product",
+          "maxLength": 200
+        },
+        "slug": {
+          "type": "string",
+          "description": "URL-friendly product slug",
+          "maxLength": 250
+        },
+        "sku": {
+          "type": "string",
+          "description": "Stock keeping unit",
+          "maxLength": 100
+        },
+        "brand": {
+          "type": "string",
+          "description": "Product brand name",
+          "maxLength": 100
+        },
+        "category": {
+          "type": "string",
+          "description": "Primary product category key",
+          "maxLength": 100
+        },
+        "categoryName": {
+          "type": "string",
+          "description": "Human-readable category label",
+          "maxLength": 100
+        },
+        "subcategory": {
+          "type": "string",
+          "description": "Subcategory name",
+          "maxLength": 100
+        },
+        "price": {
+          "type": "number",
+          "description": "Current selling price in BDT"
+        },
+        "originalPrice": {
+          "type": "number",
+          "description": "Original price before discount in BDT"
+        },
+        "discountPercent": {
+          "type": "number",
+          "description": "Discount percentage"
+        },
+        "rating": {
+          "type": "number",
+          "description": "Average review rating between 1 and 5"
+        },
+        "reviewCount": {
+          "type": "number",
+          "description": "Total number of user reviews"
+        },
+        "inStock": {
+          "type": "boolean",
+          "description": "Whether the product is currently in stock"
+        },
+        "stockCount": {
+          "type": "number",
+          "description": "Current inventory unit count"
+        },
+        "image": {
+          "type": "string",
+          "description": "Primary product image URL",
+          "maxLength": 2000
+        },
+        "gallery": {
+          "type": "array",
+          "description": "Additional gallery image URLs"
+        },
+        "description": {
+          "type": "string",
+          "description": "Full product description text",
+          "maxLength": 10000
+        },
+        "shortDescription": {
+          "type": "string",
+          "description": "Short summary description",
+          "maxLength": 1000
+        },
+        "features": {
+          "type": "array",
+          "description": "List of key product highlights and features"
+        },
+        "specifications": {
+          "type": "object",
+          "description": "Key-value pairs of technical specifications"
+        },
+        "colors": {
+          "type": "array",
+          "description": "Color variants available"
+        },
+        "sizes": {
+          "type": "array",
+          "description": "Size options available"
+        },
+        "variants": {
+          "type": "array",
+          "description": "Detailed variant SKU items"
+        },
+        "tags": {
+          "type": "array",
+          "description": "Search and filter tags"
+        },
+        "isFeatured": {
+          "type": "boolean",
+          "description": "Whether product is pinned to featured showcase"
+        },
+        "isTrending": {
+          "type": "boolean",
+          "description": "Whether product is marked as trending"
+        },
+        "isBestSeller": {
+          "type": "boolean",
+          "description": "Whether product is marked as bestseller"
+        },
+        "isNewArrival": {
+          "type": "boolean",
+          "description": "Whether product is in new arrivals"
+        },
+        "isSpecialOffer": {
+          "type": "boolean",
+          "description": "Whether product has an active special offer"
+        },
+        "flashSale": {
+          "type": "boolean",
+          "description": "Whether product is part of a flash deal"
+        },
+        "flashSalePrice": {
+          "type": "number",
+          "description": "Flash sale discounted price"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Product creation ISO date or timestamp",
+          "maxLength": 50
+        }
+      },
+      "required": ["id", "name", "category", "price", "image", "inStock"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Product classification category in Zayn.Fashion",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Category identifier",
+          "maxLength": 100
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name of category",
+          "maxLength": 100
+        },
+        "slug": {
+          "type": "string",
+          "description": "URL slug for category",
+          "maxLength": 120
+        },
+        "tagline": {
+          "type": "string",
+          "description": "Catchy promotional tagline for category",
+          "maxLength": 200
+        },
+        "image": {
+          "type": "string",
+          "description": "Category representative image URL",
+          "maxLength": 2000
+        },
+        "icon": {
+          "type": "string",
+          "description": "Optional category icon identifier",
+          "maxLength": 100
+        },
+        "productCount": {
+          "type": "number",
+          "description": "Estimated product count in category"
+        },
+        "popularSubcategories": {
+          "type": "array",
+          "description": "List of active subcategories"
+        },
+        "badge": {
+          "type": "string",
+          "description": "Promotional badge tag",
+          "maxLength": 50
+        }
+      },
+      "required": ["id", "name", "slug", "image"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer purchase order with line items, delivery details, and tracking events",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique order ID",
+          "maxLength": 128
+        },
+        "orderNumber": {
+          "type": "string",
+          "description": "Human-friendly order code e.g. ZAYN-12345",
+          "maxLength": 50
+        },
+        "date": {
+          "type": "string",
+          "description": "Date string of order placement",
+          "maxLength": 50
+        },
+        "items": {
+          "type": "array",
+          "description": "List of ordered cart items"
+        },
+        "subtotal": {
+          "type": "number",
+          "description": "Subtotal before delivery and discounts"
+        },
+        "deliveryCharge": {
+          "type": "number",
+          "description": "Delivery fee in BDT"
+        },
+        "discount": {
+          "type": "number",
+          "description": "Discount applied in BDT"
+        },
+        "couponCode": {
+          "type": "string",
+          "description": "Optional coupon code used",
+          "maxLength": 50
+        },
+        "total": {
+          "type": "number",
+          "description": "Final payable amount in BDT"
+        },
+        "status": {
+          "type": "string",
+          "description": "Current lifecycle status of the order",
+          "enum": ["placed", "confirmed", "processing", "shipped", "out_for_delivery", "delivered", "cancelled"],
+          "maxLength": 50
+        },
+        "shippingAddress": {
+          "type": "object",
+          "description": "Customer shipping and contact address"
+        },
+        "paymentMethod": {
+          "type": "string",
+          "description": "Payment method chosen (cod, bkash, nagad, card)",
+          "maxLength": 50
+        },
+        "paymentStatus": {
+          "type": "string",
+          "description": "Payment status (pending, paid)",
+          "maxLength": 50
+        },
+        "trackingEvents": {
+          "type": "array",
+          "description": "Historical and current tracking checkpoint events"
+        },
+        "estimatedDelivery": {
+          "type": "string",
+          "description": "Estimated delivery timeframe text",
+          "maxLength": 100
+        },
+        "deliveryNotes": {
+          "type": "string",
+          "description": "Optional delivery instructions from customer",
+          "maxLength": 1000
+        },
+        "userId": {
+          "type": "string",
+          "description": "UID of the ordering user (if signed in)",
+          "maxLength": 128
+        },
+        "userEmail": {
+          "type": "string",
+          "description": "Email address of customer",
+          "maxLength": 200
+        },
+        "customerProfile": {
+          "type": "object",
+          "description": "Snapshot of customer name and phone at time of order"
+        }
+      },
+      "required": ["id", "orderNumber", "items", "subtotal", "total", "status", "shippingAddress", "paymentMethod"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Registered customer profile and saved delivery addresses",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Firebase Auth UID",
+          "maxLength": 128
+        },
+        "name": {
+          "type": "string",
+          "description": "Customer display name",
+          "maxLength": 150
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address",
+          "maxLength": 200
+        },
+        "phone": {
+          "type": "string",
+          "description": "Contact phone number",
+          "maxLength": 50
+        },
+        "avatar": {
+          "type": "string",
+          "description": "Profile picture URL",
+          "maxLength": 2000
+        },
+        "joinedDate": {
+          "type": "string",
+          "description": "Registration date",
+          "maxLength": 50
+        },
+        "role": {
+          "type": "string",
+          "description": "User role: customer or admin",
+          "enum": ["customer", "admin"],
+          "maxLength": 20
+        },
+        "addresses": {
+          "type": "array",
+          "description": "List of saved shipping addresses"
+        }
+      },
+      "required": ["id", "email", "name"]
+    },
+    "Admin": {
+      "title": "Admin",
+      "description": "Administrator whitelist record for store management",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Authorized administrator email address",
+          "maxLength": 200
+        },
+        "role": {
+          "type": "string",
+          "description": "Role identifier",
+          "maxLength": 50
+        },
+        "assignedAt": {
+          "type": "string",
+          "description": "Timestamp when admin status was granted",
+          "maxLength": 50
+        }
+      },
+      "required": ["email", "role"]
+    }
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": {
+        "$ref": "#/entities/Product"
+      },
+      "description": "Collection of all e-commerce products available for public browsing and catalog management by admin"
+    },
+    "/categories/{categoryId}": {
+      "schema": {
+        "$ref": "#/entities/Category"
+      },
+      "description": "Catalog categories and subcategories managed by store admin"
+    },
+    "/orders/{orderId}": {
+      "schema": {
+        "$ref": "#/entities/Order"
+      },
+      "description": "Customer purchase orders placed in the store, trackable by customer and manageable by admin"
+    },
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Private user account profiles and delivery addresses accessible by the user and store admin"
+    },
+    "/admins/{adminId}": {
+      "schema": {
+        "$ref": "#/entities/Admin"
+      },
+      "description": "Administrator whitelist documents"
+    }
+  }
+}

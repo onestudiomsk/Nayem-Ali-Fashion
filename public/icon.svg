@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="ebundi-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E11D48"/>
+      <stop offset="50%" stop-color="#EA580C"/>
+      <stop offset="100%" stop-color="#E67E22"/>
+    </linearGradient>
+    <linearGradient id="ebundi-inner" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#FFF1F2"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#E11D48" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Background with rounded squircle -->
+  <rect width="512" height="512" rx="128" fill="url(#ebundi-grad)"/>
+
+  <!-- Subtle inner ambient circle -->
+  <circle cx="256" cy="256" r="190" fill="none" stroke="#FFFFFF" stroke-opacity="0.15" stroke-width="6"/>
+
+  <!-- Shopping Bag / Letter E Symbol -->
+  <g filter="url(#shadow)" transform="translate(106, 96)">
+    <!-- Bag Handle -->
+    <path d="M 85 105 C 85 45, 215 45, 215 105" fill="none" stroke="url(#ebundi-inner)" stroke-width="22" stroke-linecap="round"/>
+    
+    <!-- Modern Shopping Bag Body -->
+    <path d="M 35 105 L 265 105 C 278 105, 287 117, 284 130 L 260 295 C 257 312, 242 325, 225 325 L 75 325 C 58 325, 43 312, 40 295 L 16 130 C 13 117, 22 105, 35 105 Z" fill="url(#ebundi-inner)"/>
+
+    <!-- Stylized 'e' letter monogram inside bag -->
+    <path d="M 195 195 C 190 160, 120 155, 110 195 C 100 235, 185 240, 190 265 C 195 285, 160 295, 125 285" fill="none" stroke="#E11D48" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Center Sparkle Star -->
+    <path d="M 230 145 Q 230 160 245 160 Q 230 160 230 175 Q 230 160 215 160 Q 230 160 230 145 Z" fill="#E67E22"/>
+  </g>
+</svg>

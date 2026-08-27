@@ -1,0 +1,8 @@
+{
+  "name": "Nayeem Ali Fashion",
+  "description": "A modern, stylish, premium e-commerce marketplace for fashion, beauty, home decor, appliances, toys, and daily essentials with cart, checkout, tracking, and admin panel.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
