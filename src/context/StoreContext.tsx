@@ -284,15 +284,14 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // Loading state for initial cloud sync
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
 
-  // Products state (synchronized with standalone local storage - Demo products excluded)
+  // Products state (synchronized with local storage & cloud persistence)
   const [products, setProducts] = useState<Product[]>(() => {
     try {
       const saved = localStorage.getItem(LOCAL_STORAGE_KEYS.PRODUCTS);
       if (saved) {
         const parsed: Product[] = JSON.parse(saved);
-        const userProductsOnly = parsed.filter((p) => !isDemoProductId(p.id));
-        if (userProductsOnly.length > 0) {
-          return userProductsOnly;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
         }
       }
       return INITIAL_PRODUCTS;
@@ -307,7 +306,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       const saved = localStorage.getItem(LOCAL_STORAGE_KEYS.CART);
       if (saved) {
         const parsed: CartItem[] = JSON.parse(saved);
-        return parsed.filter((it) => !isDemoProductId(it.product.id));
+        return Array.isArray(parsed) ? parsed : [];
       }
       return [];
     } catch {
@@ -321,7 +320,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       const saved = localStorage.getItem(LOCAL_STORAGE_KEYS.WISHLIST);
       if (saved) {
         const parsed: Product[] = JSON.parse(saved);
-        return parsed.filter((p) => !isDemoProductId(p.id));
+        return Array.isArray(parsed) ? parsed : [];
       }
       return [];
     } catch {
@@ -378,39 +377,24 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     // 1. Subscribe to Products
     const unsubscribeProducts = subscribeToProducts((firestoreProducts) => {
-      // Clean up any stray demo products if found
-      const demoProducts = (firestoreProducts || []).filter((p) => isDemoProductId(p.id));
-      if (demoProducts.length > 0) {
-        demoProducts.forEach((demoP) => {
-          deleteProductFromFirestore(demoP.id).catch(() => {});
-        });
-      }
+      const activeProducts = firestoreProducts && firestoreProducts.length > 0 ? firestoreProducts : INITIAL_PRODUCTS;
 
-      // Filter out demo products so only real user products are retained
-      const realFirestoreProducts = (firestoreProducts || []).filter((p) => !isDemoProductId(p.id));
-
-      let localUserProducts: Product[] = [];
+      let localProducts: Product[] = [];
       try {
         const saved = localStorage.getItem(LOCAL_STORAGE_KEYS.PRODUCTS);
         if (saved) {
           const parsed = JSON.parse(saved);
-          if (Array.isArray(parsed)) {
-            localUserProducts = parsed.filter((p: Product) => p && p.id && !isDemoProductId(p.id));
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            localProducts = parsed;
           }
         }
       } catch (e) {}
 
-      const missingFromFirestore = localUserProducts.filter(
-        (localP) => !realFirestoreProducts.some((fireP) => fireP.id === localP.id)
+      const missingFromFirestore = localProducts.filter(
+        (localP) => !activeProducts.some((fireP) => fireP.id === localP.id)
       );
 
-      if (missingFromFirestore.length > 0) {
-        missingFromFirestore.forEach((missingProd) => {
-          saveProductToFirestore(missingProd).catch(() => {});
-        });
-      }
-
-      const mergedList = [...realFirestoreProducts];
+      const mergedList = [...activeProducts];
       missingFromFirestore.forEach((mp) => {
         mergedList.push(mp);
       });

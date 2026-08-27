@@ -116,8 +116,7 @@ export function subscribeToProducts(
         handleFirestoreError(error, OperationType.LIST, PRODUCTS_COLLECTION);
       } catch (e) {
         if (onError) onError(e);
-        // Fallback to local catalog
-        onProductsUpdate(INITIAL_PRODUCTS);
+        onProductsUpdate([]);
       }
     }
   );
