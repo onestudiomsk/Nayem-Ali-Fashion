@@ -1,7 +1,7 @@
 # Security Specification: Zayn.Fashion Firestore ABAC Security
 
 ## 1. Data Invariants
-- **Products**: Any visitor can read public product catalogs (`allow read: if true`). Only verified Store Admin (`mskhereiam5610@gmail.com` or doc in `/admins/$(request.auth.uid)`) can create, update, or delete products. Product IDs must conform to alphanumeric/hyphen/underscore patterns (`^[a-zA-Z0-9_\-]+$`) with max size 128 chars.
+- **Products**: Any visitor can read public product catalogs (`allow read: if true`). Only verified Store Admin (`nayeemalizayn@gmail.com` / `mskhereiam5610@gmail.com` or doc in `/admins/$(request.auth.uid)`) can create, update, or delete products. Product IDs must conform to alphanumeric/hyphen/underscore patterns (`^[a-zA-Z0-9_\-]+$`) with max size 128 chars.
 - **Categories**: Any visitor can read store categories (`allow read: if true`). Only verified Store Admin can create, update, or delete categories.
 - **Orders**: Orders can be created with valid order details (non-empty items, valid total, shipping address). Customers can read their own orders (`resource.data.userId == request.auth.uid` or matching user email). Store Admin can read, list, and update all order statuses. Once an order is delivered or cancelled, only Admin can alter its status.
 - **Users**: User profiles (`/users/{userId}`) are private. Only the authenticated owner (`request.auth.uid == userId`) or Store Admin can read or write their user profile. Role elevation to `admin` by regular users is strictly prevented.

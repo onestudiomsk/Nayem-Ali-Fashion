@@ -13,7 +13,8 @@ import {
 } from 'firebase/auth';
 import { auth, googleProvider } from './firebase';
 
-export const ADMIN_EMAIL = 'mskhereiam5610@gmail.com';
+export const ADMIN_EMAIL = 'nayeemalizayn@gmail.com';
+export const ADMIN_EMAILS = ['nayeemalizayn@gmail.com', 'mskhereiam5610@gmail.com'];
 
 export interface StandaloneUser {
   uid: string;
@@ -35,12 +36,13 @@ export type User = FirebaseUser | StandaloneUser;
 export { auth };
 
 /**
- * Checks if the given email is the sole authorized administrator.
- * Only 'mskhereiam5610@gmail.com' is allowed admin access.
+ * Checks if the given email is an authorized administrator.
+ * Grants admin power to 'nayeemalizayn@gmail.com' and fallback 'mskhereiam5610@gmail.com'.
  */
 export const isAuthorizedAdminEmail = (email?: string | null): boolean => {
   if (!email) return false;
-  return email.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase();
+  const clean = email.trim().toLowerCase();
+  return ADMIN_EMAILS.some((adminEmail) => adminEmail.toLowerCase() === clean);
 };
 
 export const onAuthStateChanged = (
