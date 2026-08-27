@@ -28,8 +28,7 @@ export const ProductGridSection: React.FC<ProductGridSectionProps> = ({
   limit = 12,
   enableInfiniteScroll = true,
 }) => {
-  const { products, categories, navigateTo } = useStore();
-  const [activeCategoryTab, setActiveCategoryTab] = useState<string>('all');
+  const { products, navigateTo } = useStore();
   const [visibleCount, setVisibleCount] = useState<number>(limit);
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -43,7 +42,7 @@ export const ProductGridSection: React.FC<ProductGridSectionProps> = ({
   }, [products, type]);
 
   // Filter products based on section type
-  let filtered = baseProducts.filter((p) => {
+  const filtered = baseProducts.filter((p) => {
     if (type === 'bestsellers') return Boolean(p.isBestSeller);
     if (type === 'trending') return Boolean(p.isTrending);
     if (type === 'newarrivals') return Boolean(p.isNewArrival);
@@ -51,15 +50,10 @@ export const ProductGridSection: React.FC<ProductGridSectionProps> = ({
     return true;
   });
 
-  // Apply category tab filter if not 'all'
-  if (activeCategoryTab !== 'all') {
-    filtered = filtered.filter((p) => p.category === activeCategoryTab);
-  }
-
-  // Reset visibleCount whenever category tab or filter changes
+  // Reset visibleCount whenever filter changes
   useEffect(() => {
     setVisibleCount(limit);
-  }, [activeCategoryTab, type, limit]);
+  }, [type, limit]);
 
   // Infinite Scroll Intersection Observer
   useEffect(() => {
@@ -106,60 +100,22 @@ export const ProductGridSection: React.FC<ProductGridSectionProps> = ({
 
   return (
     <section id={`section-${type}`} className="py-10 sm:py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      {/* Header with Title & Filter Tabs */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 border-b border-gray-200/80 pb-5">
-        <div>
-          <div className="flex items-center gap-2 text-xs font-bold text-[#E67E22] uppercase tracking-wider mb-1">
-            {getIcon()}
-            <span>{type === 'all' ? 'ALL PRODUCTS' : type.toUpperCase()} COLLECTION</span>
-          </div>
-          <h2 className="font-heading text-2xl sm:text-3xl font-extrabold text-[#1A1C23] tracking-tight">
-            {title}
-          </h2>
-          <p className="text-xs sm:text-sm text-gray-500 mt-1">{subtitle}</p>
+      {/* Header with Title */}
+      <div className="mb-8 border-b border-gray-200/80 pb-5">
+        <div className="flex items-center gap-2 text-xs font-bold text-[#E67E22] uppercase tracking-wider mb-1">
+          {getIcon()}
+          <span>{type === 'all' ? 'ALL PRODUCTS' : type.toUpperCase()} COLLECTION</span>
         </div>
-
-        {/* Category Pills - Dynamically populated with all store categories */}
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
-          <button
-            onClick={() => setActiveCategoryTab('all')}
-            className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all whitespace-nowrap cursor-pointer ${
-              activeCategoryTab === 'all'
-                ? 'bg-[#1A1C23] text-white shadow-xs'
-                : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
-            }`}
-          >
-            All Items ({products.length})
-          </button>
-          {categories.map((cat) => {
-            const catCount = products.filter((p) => p.category === cat.id).length;
-            return (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategoryTab(cat.id)}
-                className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all whitespace-nowrap cursor-pointer ${
-                  activeCategoryTab === cat.id
-                    ? 'bg-[#1A1C23] text-white shadow-xs'
-                    : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
-                }`}
-              >
-                {cat.name} {catCount > 0 ? `(${catCount})` : ''}
-              </button>
-            );
-          })}
-        </div>
+        <h2 className="font-heading text-2xl sm:text-3xl font-extrabold text-[#1A1C23] tracking-tight">
+          {title}
+        </h2>
+        <p className="text-xs sm:text-sm text-gray-500 mt-1">{subtitle}</p>
       </div>
 
       {/* Responsive Product Grid */}
       {displayedProducts.length === 0 ? (
         <div className="py-14 text-center bg-white rounded-3xl border border-gray-100 p-8 shadow-xs">
-          <p className="text-sm font-semibold text-gray-700">No products in this filter right now.</p>
-          <button
-            onClick={() => setActiveCategoryTab('all')}
-            className="mt-3 text-xs font-bold text-[#E67E22] underline cursor-pointer"
-          >
-            View all products
-          </button>
+          <p className="text-sm font-semibold text-gray-700">No products available in this section right now.</p>
         </div>
       ) : (
         <>
