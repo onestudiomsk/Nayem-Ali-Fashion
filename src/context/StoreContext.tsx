@@ -173,40 +173,6 @@ const LOCAL_STORAGE_KEYS = {
   CATEGORIES: 'zayn_categories_v10',
 };
 
-const DEFAULT_USER: UserProfile = {
-  id: 'usr-default',
-  name: 'Sumaiya Chowdhury',
-  email: 'sumaiya.c@example.com',
-  phone: '01712-345678',
-  avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop',
-  joinedDate: '2026-01-15',
-  role: 'customer',
-  addresses: [
-    {
-      id: 'addr-1',
-      title: 'Home',
-      receiverName: 'Sumaiya Chowdhury',
-      phone: '01712-345678',
-      streetAddress: 'House 42, Road 11, Block D, Banani',
-      city: 'Dhaka',
-      area: 'Banani',
-      postalCode: '1213',
-      isDefault: true,
-    },
-    {
-      id: 'addr-2',
-      title: 'Office',
-      receiverName: 'Sumaiya Chowdhury',
-      phone: '01712-345678',
-      streetAddress: 'Level 7, Simpletree Anarkali, 89 Gulshan Avenue',
-      city: 'Dhaka',
-      area: 'Gulshan 2',
-      postalCode: '1212',
-      isDefault: false,
-    },
-  ],
-};
-
 // Helper to parse route from URL
 const parseRouteFromUrl = (): {
   view: AppView;
@@ -328,12 +294,17 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   });
 
-  // User state - strictly sanitized
+  // User state - strictly sanitized (No default/auto login; visitors start as guests)
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(() => {
     try {
       const saved = localStorage.getItem(LOCAL_STORAGE_KEYS.USER);
       if (saved) {
         const parsed: UserProfile = JSON.parse(saved);
+        // If it was the legacy default mock user 'usr-default' or 'sumaiya.c@example.com', disregard it
+        if (parsed.id === 'usr-default' || parsed.email === 'sumaiya.c@example.com') {
+          localStorage.removeItem(LOCAL_STORAGE_KEYS.USER);
+          return null;
+        }
         // Security check: ONLY ADMIN_EMAIL (mskhereiam5610@gmail.com) can ever have admin role
         const isEligibleAdmin = isAuthorizedAdminEmail(parsed.email);
         return {
@@ -341,9 +312,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           role: isEligibleAdmin ? 'admin' : 'customer',
         };
       }
-      return DEFAULT_USER;
+      return null;
     } catch {
-      return DEFAULT_USER;
+      return null;
     }
   });
 
@@ -438,7 +409,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         const userEmail = authUser.email;
         const isTargetAdmin = isAuthorizedAdminEmail(userEmail);
         setCurrentUser((prev) => {
-          const baseAddresses = prev?.addresses?.length ? prev.addresses : DEFAULT_USER.addresses;
+          const baseAddresses = prev?.addresses?.length ? prev.addresses : [];
           return {
             id: authUser.uid,
             name: authUser.displayName || (userEmail.includes('@') ? userEmail.split('@')[0] : 'Zayn User'),
@@ -510,6 +481,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   useEffect(() => {
     if (currentUser) {
       localStorage.setItem(LOCAL_STORAGE_KEYS.USER, JSON.stringify(currentUser));
+    } else {
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.USER);
     }
   }, [currentUser]);
 
@@ -770,9 +743,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       avatar: isTargetAdmin 
         ? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop'
         : 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop',
-      joinedDate: '2026-08-20',
+      joinedDate: new Date().toISOString().substring(0, 10),
       role: assignedRole,
-      addresses: DEFAULT_USER.addresses,
+      addresses: [],
     };
     setCurrentUser(newUser);
     setIsAuthModalOpen(false);

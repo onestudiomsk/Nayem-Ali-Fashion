@@ -639,7 +639,7 @@ export const Navbar: React.FC = () => {
                   className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-50 flex items-center gap-2"
                 >
                   <User className="w-4 h-4 text-gray-500" />
-                  <span>My Account & Orders</span>
+                  <span>{currentUser ? 'My Account & Orders' : 'Sign In / Account'}</span>
                 </button>
                 {isAdmin && (
                   <button
