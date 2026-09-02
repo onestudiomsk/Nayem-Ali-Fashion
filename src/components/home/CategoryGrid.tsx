@@ -70,23 +70,6 @@ export const CategoryGrid: React.FC = () => {
                 <p className="text-xs text-gray-500 line-clamp-1 mt-1 font-normal">
                   {cat.tagline}
                 </p>
-
-                {/* Popular Subcategories Chips */}
-                <div className="flex items-center gap-1.5 mt-3 pt-2.5 border-t border-gray-100 flex-wrap">
-                  {cat.popularSubcategories.slice(0, 3).map((sub) => (
-                    <span
-                      key={sub}
-                      className="text-[10px] font-semibold text-slate-600 bg-slate-100 hover:bg-orange-50 hover:text-[#E67E22] px-2 py-0.5 rounded-md transition-colors"
-                    >
-                      {sub}
-                    </span>
-                  ))}
-                  {cat.popularSubcategories.length > 3 && (
-                    <span className="text-[10px] font-bold text-gray-400">
-                      +{cat.popularSubcategories.length - 3} more
-                    </span>
-                  )}
-                </div>
               </div>
             </div>
           ))}
